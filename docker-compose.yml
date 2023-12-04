@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  mysql-container:
+    image: mysql:8.0.28
+    container_name: mysql-container
+    environment:
+      MYSQL_DATABASE: movielibrary
+      MYSQL_USER: root
+      MYSQL_PASSWORD: szymon
+      MYSQL_ROOT_PASSWORD: szymon
+    ports:
+      - "3306:3306"
+    networks:
+      - my-network
+
+  wiremock-container:
+    image: rodolpheche/wiremock:2.30.1
+    container_name: wiremock-container
+    ports:
+      - "8080:8080"
+    networks:
+      - my-network
+
+networks:
+  my-network:
+    driver: bridge
