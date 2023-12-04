@@ -10,16 +10,16 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.utility.DockerImageName;
 
 @SpringBootTest(classes = {MovieLibraryApplication.class})
 @ActiveProfiles("integration")
 @AutoConfigureMockMvc
 @Testcontainers
 public class BaseIntegrationTest {
-
-    public static final String WIRE_MOCK_HOST = "http://localhost";
 
     @Autowired
     public MockMvc mockMvc;
@@ -32,11 +32,6 @@ public class BaseIntegrationTest {
             .withDatabaseName("testdb")
             .withUsername("testuser")
             .withPassword("testpassword");
-
-    @RegisterExtension
-    public static WireMockExtension wireMockServer = WireMockExtension.newInstance()
-            .options(wireMockConfig().dynamicPort())
-            .build();
 
     @DynamicPropertySource
     public static void propertyOverride(DynamicPropertyRegistry registry) {
