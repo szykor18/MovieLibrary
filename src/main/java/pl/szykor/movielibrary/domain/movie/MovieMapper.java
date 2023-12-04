@@ -13,10 +13,10 @@ class MovieMapper {
     }
     static MovieDto mapFromMovieToDto(Movie movie) {
         return MovieDto.builder()
-                .id(movie.id())
-                .title(movie.title())
-                .rating(movie.rating())
-                .image(movie.image())
+                .id(movie.getId())
+                .title(movie.getTitle())
+                .rating(movie.getRating())
+                .image(movie.getImage())
                 .build();
     }
 }

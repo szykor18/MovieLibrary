@@ -14,9 +14,9 @@ class UserMapper {
 
     static UserDto mapFromUserToDto(User user) {
         return UserDto.builder()
-                .id(user.id())
-                .username(user.username())
-                .password(user.password())
+                .id(user.getId())
+                .username(user.getUsername())
+                .password(user.getPassword())
                 .build();
     }
 }

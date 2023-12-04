@@ -3,7 +3,6 @@ package pl.szykor.movielibrary.domain.movie;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
-import java.util.Optional;
 
 @AllArgsConstructor
 class MovieService {
@@ -19,16 +18,16 @@ class MovieService {
     }
 
     Movie addMovie(Movie movie) {
-        Movie addedMovie = movieRepository.add(movie);
+        Movie addedMovie = movieRepository.save(movie);
         return addedMovie;
     }
     Movie updateMovie(Movie movie) {
-        Movie updatedMovie = movieRepository.update(movie);
+        Movie updatedMovie = movieRepository.save(movie);
         return updatedMovie;
     }
 
-    Movie deleteMovie(Movie movie) {
-        Movie deletedMovie = movieRepository.delete(movie);
+    Movie deleteByTitle(String title) {
+        Movie deletedMovie = movieRepository.deleteByTitle(title);
         return deletedMovie;
     }
 }

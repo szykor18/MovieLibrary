@@ -1,13 +1,16 @@
 package pl.szykor.movielibrary.domain.movie;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
 import java.util.List;
 import java.util.Optional;
 
-public interface MovieRepository {
+@Repository
+public interface MovieRepository extends JpaRepository<Movie, Integer> {
 
     Optional<Movie> findByTitle(String title);
-    List<Movie> findAll();
-    Movie add(Movie movie);
-    Movie update(Movie movie);
-    Movie delete(Movie movie);
+
+    Movie deleteByTitle(String title);
+
 }

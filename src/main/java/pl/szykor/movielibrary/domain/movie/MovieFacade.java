@@ -36,9 +36,8 @@ public class MovieFacade {
         return MovieMapper.mapFromMovieToDto(updatedMovie);
     }
 
-    public MovieDto deleteMovie(MovieRequestDto movieRequestDto) {
-        Movie movie = MovieMapper.mapFromMovieRequestDtoToMovie(movieRequestDto);
-        Movie deletedMovie = movieService.deleteMovie(movie);
+    public MovieDto deleteMovie(String title) {
+        Movie deletedMovie = movieService.deleteByTitle(title);
         return MovieMapper.mapFromMovieToDto(deletedMovie);
     }
 }

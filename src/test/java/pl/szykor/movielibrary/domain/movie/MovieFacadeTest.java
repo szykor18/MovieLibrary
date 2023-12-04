@@ -126,7 +126,7 @@ public class MovieFacadeTest {
                 .build();
         //when
         movieFacade.addMovie(movieRequestDto);
-        MovieDto movieDto = movieFacade.deleteMovie(movieRequestDto);
+        MovieDto movieDto = movieFacade.deleteMovie("Title");
         List<MovieDto> moviesDtos = movieFacade.findAll();
         //then
         assertAll(

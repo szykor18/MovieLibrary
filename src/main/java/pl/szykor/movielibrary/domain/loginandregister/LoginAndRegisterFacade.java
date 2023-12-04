@@ -14,8 +14,8 @@ public class LoginAndRegisterFacade {
         User user = UserMapper.mapFromRegisterToUser(registerRequest);
         User savedUser = userRepository.save(user);
         return RegisterResultDto.builder()
-                .id(savedUser.id())
-                .username(savedUser.username())
+                .id(savedUser.getId())
+                .username(savedUser.getUsername())
                 .isCreated(true)
                 .build();
     }
