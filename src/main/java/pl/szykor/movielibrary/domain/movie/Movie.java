@@ -13,11 +13,11 @@ import lombok.NoArgsConstructor;
 @Entity
 class Movie {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private Integer id;
     @Column(name = "title")
     private String title;
     @Column(name = "rating")
     private String rating;
-    @Column(name = "image")
+    @Column(name = "image", length = 10000)
     private byte[] image;
 }

@@ -7,10 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -33,7 +30,7 @@ public class InMemoryMovieRepositoryTestImpl implements MovieRepository {
 
     @Override
     public <S extends Movie> S save(S entity) {
-        String id = UUID.randomUUID().toString();
+        Integer id = new Random().nextInt(10000);
         Movie movie = Movie.builder()
                 .id(id)
                 .title(entity.getTitle())

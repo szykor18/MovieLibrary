@@ -46,8 +46,8 @@ public class MovieFacadeTest {
         movieFacade.addMovie(movieRequestDto1);
         movieFacade.addMovie(movieRequestDto2);
         List<MovieDto> movieDtos = movieFacade.findAll();
-        String id1 = movieDtos.get(0).id();
-        String id2 = movieDtos.get(1).id();
+        Integer id1 = movieDtos.get(0).id();
+        Integer id2 = movieDtos.get(1).id();
         //then
         assertThat(movieDtos).containsExactlyInAnyOrder(
                 MovieDto.builder()
