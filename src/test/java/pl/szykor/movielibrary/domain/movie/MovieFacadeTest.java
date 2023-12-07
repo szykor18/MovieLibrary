@@ -126,15 +126,12 @@ public class MovieFacadeTest {
                 .build();
         //when
         movieFacade.addMovie(movieRequestDto);
-        MovieDto movieDto = movieFacade.deleteMovie("Title");
-        List<MovieDto> moviesDtos = movieFacade.findAll();
+        List<MovieDto> movieDtosWithSize1 = movieFacade.findAll();
+        movieFacade.deleteMovie("Title");
+        List<MovieDto> movieDtosWithSize0 = movieFacade.findAll();
         //then
-        assertAll(
-                () -> assertThat(movieDto.id()).isNotNull(),
-                () -> assertThat(movieDto.title()).isEqualTo("Title"),
-                () -> assertThat(movieDto.rating()).isEqualTo("Rating"),
-                () -> assertThat(moviesDtos).doesNotContain(movieDto)
-        );
+        assertThat(movieDtosWithSize1).hasSize(1);
+        assertThat(movieDtosWithSize0).hasSize(0);
     }
 
 }

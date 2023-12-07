@@ -78,7 +78,7 @@ public class InMemoryMovieRepositoryTestImpl implements MovieRepository {
 
     @Override
     public void delete(Movie entity) {
-
+        movies.remove(entity.getTitle());
     }
 
     @Override

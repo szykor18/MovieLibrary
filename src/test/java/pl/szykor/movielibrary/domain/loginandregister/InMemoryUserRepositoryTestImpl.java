@@ -150,7 +150,7 @@ public class InMemoryUserRepositoryTestImpl implements UserRepository {
 
     @Override
     public void delete(User entity) {
-
+        users.remove(entity.getUsername());
     }
 
     @Override
