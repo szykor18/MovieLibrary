@@ -1,5 +1,6 @@
 package pl.szykor.movielibrary.feature;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -8,15 +9,10 @@ import org.springframework.test.web.servlet.ResultActions;
 import pl.szykor.movielibrary.BaseIntegrationTest;
 import pl.szykor.movielibrary.domain.movie.MovieFacade;
 import pl.szykor.movielibrary.domain.movie.dto.MovieDto;
-import pl.szykor.movielibrary.domain.movie.dto.MovieRequestDto;
-
 import java.util.List;
-import java.util.Random;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class UserWantToAddSomeMoviesAndRateThemIntegrationTest extends BaseIntegrationTest {
@@ -40,14 +36,12 @@ public class UserWantToAddSomeMoviesAndRateThemIntegrationTest extends BaseInteg
         String addedMovieJson = mvcAddResult.getResponse().getContentAsString();
         MovieDto addedMovie = objectMapper.readValue(addedMovieJson, MovieDto.class);
         Integer id = addedMovie.id();
-        List<MovieDto> moviesDtos = movieFacade.findAll();
         //then
-        assertThat(moviesDtos).containsExactlyInAnyOrder(MovieDto.builder()
+        assertThat(addedMovie).isEqualTo(MovieDto.builder()
                 .id(id)
                 .title("Title")
                 .rating("Rating")
                 .build());
-        assertThat(moviesDtos).hasSize(1);
 
 
     //step 2: User made a mistake and want to update previous movie he added.
@@ -63,9 +57,8 @@ public class UserWantToAddSomeMoviesAndRateThemIntegrationTest extends BaseInteg
         MvcResult mvcUpdateResult = performUpdateMovie.andExpect(status().isOk()).andReturn();
         String updatedMovieJson = mvcUpdateResult.getResponse().getContentAsString();
         MovieDto updatedMovie = objectMapper.readValue(updatedMovieJson, MovieDto.class);
-        List<MovieDto> moviesDtos2 = movieFacade.findAll();
         //then
-        assertThat(moviesDtos2).containsExactlyInAnyOrder(MovieDto.builder()
+        assertThat(updatedMovie).isEqualTo(MovieDto.builder()
                 .id(id)
                 .title("Title")
                 .rating("Rating+1")
@@ -74,21 +67,29 @@ public class UserWantToAddSomeMoviesAndRateThemIntegrationTest extends BaseInteg
 
     //step 3: User want see to all movies and system returns movies: [movieDto: id:1, Title:Title, Rating:Rating+1]
         //given && when
-        List<MovieDto> movies = movieFacade.findAll();
+        ResultActions performGetAll = mockMvc.perform(get("/movies")
+                .contentType(MediaType.APPLICATION_JSON));
+        MvcResult mvcGetAllResult = performGetAll.andExpect(status().isOk()).andReturn();
+        String getAllMoviesJson = mvcGetAllResult.getResponse().getContentAsString();
+        List<MovieDto> allMovies = objectMapper.readValue(getAllMoviesJson, new TypeReference<>(){});
         //then
-        assertThat(movies).containsExactlyInAnyOrder(MovieDto.builder()
+        assertThat(allMovies).containsExactlyInAnyOrder(MovieDto.builder()
                 .id(id)
                 .title("Title")
                 .rating("Rating+1")
                 .build());
-        assertThat(movies).hasSize(1);
+        assertThat(allMovies).hasSize(1);
 
 
-    //step 3: User want to see movie by title: "Title" and system returns one movie (id:1, Title:Title, Rating:Rating+1)
+    //step 4: User want to see movie by title: "Title" and system returns movie (id:1, Title:Title, Rating:Rating+1)
         //given && when
-        MovieDto movieDto = movieFacade.findByTitle("Title");
+        ResultActions performGetByTitle = mockMvc.perform(get("/movies/Title")
+                .contentType(MediaType.APPLICATION_JSON));
+        MvcResult mvcGetByTitleAllResult = performGetByTitle.andExpect(status().isOk()).andReturn();
+        String getMovieByTitleJson = mvcGetByTitleAllResult.getResponse().getContentAsString();
+        MovieDto movieByTitle = objectMapper.readValue(getMovieByTitleJson, MovieDto.class);
         //then
-        assertThat(movieDto).isEqualTo(MovieDto.builder()
+        assertThat(movieByTitle).isEqualTo(MovieDto.builder()
                 .id(id)
                 .title("Title")
                 .rating("Rating+1")
@@ -96,11 +97,23 @@ public class UserWantToAddSomeMoviesAndRateThemIntegrationTest extends BaseInteg
 
 
     //step 4: User want to delete movie by title: Title
-        //given
-        MovieDto deletedMovie = movieFacade.deleteMovie("Title");
-        //when
-        List<MovieDto> moviesDtos3 = movieFacade.findAll();
+        //given && when
+        ResultActions performDeleteMovie = mockMvc.perform(delete("/movies/Title")
+                .content("""
+                        {
+                            "title": "Title",
+                            "rating": "Rating+1"
+                        }
+                        """.trim())
+                .contentType(MediaType.APPLICATION_JSON));
+        MvcResult mvcDeleteResult = performDeleteMovie.andExpect(status().isOk()).andReturn();
+        String deletedMovieJson = mvcDeleteResult.getResponse().getContentAsString();
+        MovieDto deletedMovie = objectMapper.readValue(deletedMovieJson, MovieDto.class);
         //then
-        assertThat(moviesDtos3).hasSize(0);
+        assertThat(deletedMovie).isEqualTo(MovieDto.builder()
+                .id(id)
+                .title("Title")
+                .rating("Rating+1")
+                .build());
     }
 }
