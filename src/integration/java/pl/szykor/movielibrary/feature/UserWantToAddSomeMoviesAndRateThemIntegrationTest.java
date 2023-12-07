@@ -13,6 +13,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class UserWantToAddSomeMoviesAndRateThemIntegrationTest extends BaseIntegrationTest {
@@ -96,7 +97,7 @@ public class UserWantToAddSomeMoviesAndRateThemIntegrationTest extends BaseInteg
                 .build());
 
 
-    //step 4: User want to delete movie by title: Title
+    //step 5: User want to delete movie by title: Title
         //given && when
         ResultActions performDeleteMovie = mockMvc.perform(delete("/movies/Title")
                 .content("""
@@ -115,5 +116,21 @@ public class UserWantToAddSomeMoviesAndRateThemIntegrationTest extends BaseInteg
                 .title("Title")
                 .rating("Rating+1")
                 .build());
+
+        //step 6: User want to see movie by title: "Title" and system returns status 404 NOT_FOUND, because user deleted it before
+        //given && when
+        ResultActions performGetByNotExistingTitle = mockMvc.perform(get("/movies/Title")
+                .contentType(MediaType.APPLICATION_JSON));
+        //then
+        performGetByNotExistingTitle.andExpect(status().isNotFound()).andExpect(
+                content().json("""
+                               {
+                               "message": "Movie with title Title not found",
+                               "status": "NOT_FOUND"
+                               }
+                               """.trim())
+        );
     }
+
+
 }
