@@ -1,10 +1,14 @@
 package pl.szykor.movielibrary.domain.movie;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @AllArgsConstructor
+@Service
 class MovieService {
     private final MovieRepository movieRepository;
 
@@ -18,16 +22,21 @@ class MovieService {
     }
 
     Movie addMovie(Movie movie) {
-        Movie addedMovie = movieRepository.save(movie);
-        return addedMovie;
+        return movieRepository.save(movie);
     }
     Movie updateMovie(Movie movie) {
-        Movie updatedMovie = movieRepository.save(movie);
-        return updatedMovie;
+        Optional<Movie> movieByTitle = movieRepository.findByTitle(movie.getTitle());
+        if (movieByTitle.isPresent()) {
+            int id = movieByTitle.get().getId();
+            return movieRepository.save(new Movie(id, movie.getTitle(), movie.getRating(), movie.getImage()));
+        }
+        throw new MovieNotFoundException(movie.getTitle());
     }
-
-    Movie deleteByTitle(String title) {
-        Movie deletedMovie = movieRepository.deleteByTitle(title);
-        return deletedMovie;
+    @Transactional
+    public Movie deleteByTitle(String title) {
+        Movie movieByTitle = movieRepository.findByTitle(title)
+                .orElseThrow(() -> new MovieNotFoundException(title));
+        movieRepository.delete(movieByTitle);
+        return movieByTitle;
     }
 }

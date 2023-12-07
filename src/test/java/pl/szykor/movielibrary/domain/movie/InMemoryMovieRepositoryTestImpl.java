@@ -22,7 +22,7 @@ public class InMemoryMovieRepositoryTestImpl implements MovieRepository {
     }
 
     @Override
-    public Movie deleteByTitle(String title) {
+    public Movie deleteMovieByTitle(String title) {
         Movie movie = movies.get(title);
         movies.remove(title);
         return movie;

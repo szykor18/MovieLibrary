@@ -36,7 +36,47 @@ public class UserWantToAddSomeMoviesAndRateThemIntegrationTest extends BaseInteg
                 .title("Title")
                 .rating("Rating")
                 .build());
-    //step 2
-    //step 3
+        assertThat(moviesDtos).hasSize(1);
+
+
+    //step 2: User made a mistake and want to update previous movie he added.
+        //given
+        MovieRequestDto updateMovieRequest = MovieRequestDto.builder()
+                .title("Title")
+                .rating("Rating+1")
+                .build();
+        //when
+        MovieDto updatedMovie = movieFacade.updateMovie(updateMovieRequest);
+        List<MovieDto> moviesDtos2 = movieFacade.findAll();
+        //then
+        assertThat(moviesDtos2).containsExactlyInAnyOrder(MovieDto.builder()
+                .id(id)
+                .title("Title")
+                .rating("Rating+1")
+                .build());
+
+
+    //step 3: User want to all movies and system returns one movie (id:1, Title:Title, Rating:Rating+1)
+        //given && when
+        List<MovieDto> movies = movieFacade.findAll();
+        //then
+        assertThat(movies).containsExactlyInAnyOrder(MovieDto.builder()
+                .id(id)
+                .title("Title")
+                .rating("Rating+1")
+                .build());
+        assertThat(movies).hasSize(1);
+
+    //step 4: User want to delete movie by title: Title
+        //given
+        MovieRequestDto getMovieRequest = MovieRequestDto.builder()
+                .title("Title")
+                .rating("Rating+1")
+                .build();
+        //when
+        MovieDto deletedMovie = movieFacade.deleteMovie("Title");
+        List<MovieDto> moviesDtos3 = movieFacade.findAll();
+        //then
+        assertThat(moviesDtos3).hasSize(0);
     }
 }
