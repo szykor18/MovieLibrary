@@ -52,7 +52,7 @@ or use <a href="http://localhost:8080/swagger-ui/index.html#/">Swagger</a>.
 
 ## Rest-API Endpoints
 
-Application provides five endpoints: for retrieving all offers, for retrieving specific offer by ID, for saving an offer, for registration and login. Please follow the specification below:
+Application provides seven endpoints: for retrieving all movies, for retrieving specific movie by title, for saving a movie, for updating a movie, for deleting a movie, for registration and login. Please follow the specification below:
 
 Service url: http://localhost:8080
 
