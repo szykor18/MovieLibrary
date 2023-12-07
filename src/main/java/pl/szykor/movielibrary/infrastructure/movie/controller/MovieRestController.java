@@ -1,5 +1,6 @@
 package pl.szykor.movielibrary.infrastructure.movie.controller;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,13 +30,13 @@ public class MovieRestController {
     }
 
     @PostMapping
-    public ResponseEntity<MovieDto> addMovie(@RequestBody MovieRequestDto movieRequestDto) {
+    public ResponseEntity<MovieDto> addMovie(@RequestBody @Valid MovieRequestDto movieRequestDto) {
         MovieDto movieDto = movieFacade.addMovie(movieRequestDto);
         return ResponseEntity.ok(movieDto);
     }
 
     @PutMapping
-    public ResponseEntity<MovieDto> updateMovie(@RequestBody MovieRequestDto movieRequestDto) {
+    public ResponseEntity<MovieDto> updateMovie(@RequestBody @Valid MovieRequestDto movieRequestDto) {
         MovieDto movieDto = movieFacade.updateMovie(movieRequestDto);
         return ResponseEntity.ok(movieDto);
     }

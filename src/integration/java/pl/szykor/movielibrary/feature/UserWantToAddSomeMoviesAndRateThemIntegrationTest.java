@@ -100,12 +100,6 @@ public class UserWantToAddSomeMoviesAndRateThemIntegrationTest extends BaseInteg
     //step 5: User want to delete movie by title: Title
         //given && when
         ResultActions performDeleteMovie = mockMvc.perform(delete("/movies/Title")
-                .content("""
-                        {
-                            "title": "Title",
-                            "rating": "Rating+1"
-                        }
-                        """.trim())
                 .contentType(MediaType.APPLICATION_JSON));
         MvcResult mvcDeleteResult = performDeleteMovie.andExpect(status().isOk()).andReturn();
         String deletedMovieJson = mvcDeleteResult.getResponse().getContentAsString();
