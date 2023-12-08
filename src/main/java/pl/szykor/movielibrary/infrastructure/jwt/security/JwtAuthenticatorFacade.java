@@ -7,6 +7,7 @@ import pl.szykor.movielibrary.infrastructure.loginandregister.controller.LoginRe
 public class JwtAuthenticatorFacade {
 
 
+
     public String authenticateTheUser(LoginRequestDto loginRequestDto) {
         return null;
     }
