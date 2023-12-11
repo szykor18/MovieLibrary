@@ -2,6 +2,7 @@ package pl.szykor.movielibrary.infrastructure.movie.controller;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.szykor.movielibrary.domain.movie.MovieFacade;
@@ -32,7 +33,7 @@ public class MovieRestController {
     @PostMapping
     public ResponseEntity<MovieDto> addMovie(@RequestBody @Valid MovieRequestDto movieRequestDto) {
         MovieDto movieDto = movieFacade.addMovie(movieRequestDto);
-        return ResponseEntity.ok(movieDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(movieDto);
     }
 
     @PutMapping

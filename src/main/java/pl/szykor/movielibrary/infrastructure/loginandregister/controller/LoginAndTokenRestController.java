@@ -20,5 +20,4 @@ public class LoginAndTokenRestController {
         LoginResultDto loginResultDto = jwtAuthenticatorFacade.authenticateTheUser(loginRequestDto);
         return ResponseEntity.ok(loginResultDto);
     }
-
 }

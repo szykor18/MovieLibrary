@@ -3,6 +3,7 @@ package pl.szykor.movielibrary.apivalidation;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import pl.szykor.movielibrary.BaseIntegrationTest;
@@ -17,6 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class ApiValidationFailedIntegrationTest extends BaseIntegrationTest {
 
+    @WithMockUser
     @Test
     public void should_return_400_bad_request_status_when_title_is_null_and_empty() throws Exception {
         //given && when
@@ -36,6 +38,7 @@ public class ApiValidationFailedIntegrationTest extends BaseIntegrationTest {
                 "title must not be empty");
     }
 
+    @WithMockUser
     @Test
     public void should_return_400_bad_request_status_when_rating_is_empty() throws Exception {
         //given && when

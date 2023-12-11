@@ -6,10 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
@@ -28,7 +25,7 @@ public class InMemoryUserRepositoryTestImpl implements UserRepository {
     }
     @Override
     public <S extends User> S save(S entity) {
-        String id = UUID.randomUUID().toString();
+        Long id = new Random().nextLong(10000);
         User user = User.builder()
                 .id(id)
                 .username(entity.getUsername())
